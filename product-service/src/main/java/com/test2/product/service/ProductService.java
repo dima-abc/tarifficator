@@ -1,26 +1,19 @@
 package com.test2.product.service;
 
-import com.test2.product.entity.Product;
+import com.test2.product.payload.NewProduct;
+import com.test2.product.payload.ProductDTO;
+import com.test2.product.payload.UpdateProduct;
 
-import java.time.LocalDate;
 import java.util.Optional;
 
 public interface ProductService {
-    Product createProduct(Product product);
+    ProductDTO createProduct(NewProduct newProduct);
 
-    Optional<Product> findProductById(String id);
+    Optional<ProductDTO> findProductById(String id);
 
-    Optional<Product> findProductByIdBeforeVersion(String id);
+    void updateProduct(String id, UpdateProduct updateProduct);
 
-    Iterable<Product> findProductByIdBetweenDate(String id, LocalDate startDate, LocalDate endDate);
+    void deleteProductById(String id);
 
-    void updateProduct(Product product);
-
-    Optional<Product> revertProductBeforeVersion(String id);
-
-    void deleteProduct(String id);
-
-    Iterable<Product> findAllProducts();
-
-
+    Iterable<ProductDTO> findAllProducts();
 }

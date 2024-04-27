@@ -1,4 +1,4 @@
-package com.test2.product.entity;
+package com.test2.product.enums;
 
 import lombok.Getter;
 

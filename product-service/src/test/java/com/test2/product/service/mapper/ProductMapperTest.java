@@ -9,10 +9,13 @@ import com.test2.product.payload.TariffDTO;
 import com.test2.product.payload.UpdateProduct;
 import org.junit.jupiter.api.Test;
 
+import java.sql.Timestamp;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 class ProductMapperTest {
 
@@ -192,6 +195,15 @@ class ProductMapperTest {
         Tariff tariff = new Tariff(uuid, 2L);
         TariffDTO expect = new TariffDTO(uuid.toString(), 2L);
         TariffDTO actual = this.productMapper.mapToTariffDTO(tariff);
+        assertEquals(expect, actual);
+    }
+
+    @Test
+    void dateTimeToTimeStamp_return_long() {
+        LocalDateTime localDateTime = LocalDateTime.of(2024, 4, 27, 23, 59, 59);
+        Timestamp timestamp = Timestamp.valueOf("2024-04-28 02:59:59");
+        long expect = timestamp.toInstant().toEpochMilli();
+        long actual = productMapper.dateTimeToTimestamp(localDateTime);
         assertEquals(expect, actual);
     }
 }

@@ -11,8 +11,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.util.TimeZone;
 import java.util.UUID;
 import java.util.stream.Stream;
 
@@ -20,6 +22,7 @@ import java.util.stream.Stream;
 @Slf4j
 public class ProductMapper {
     private final DateTimeFormatter dateFormat = DateTimeFormatter.ISO_DATE;
+    private final DateTimeFormatter dateTimeFormat = DateTimeFormatter.ISO_LOCAL_DATE_TIME;
 
     public Product mapToProduct(NewProduct newProduct) {
         TypeProduct typeProduct = mapToTypeProduct(newProduct.getTypeProductId());
@@ -113,5 +116,24 @@ public class ProductMapper {
 
     public TariffDTO mapToTariffDTO(Tariff tariff) {
         return new TariffDTO(tariff.getId().toString(), tariff.getVersion());
+    }
+
+    public long dateTimeToTimestamp(LocalDateTime dateTime) {
+        return dateTime.atZone(TimeZone.getTimeZone("UTC")
+                .toZoneId())
+                .toInstant()
+                .toEpochMilli();
+    }
+
+    public LocalDateTime mapToDateTime(String dateTime) {
+        if (dateTime == null || dateTime.isEmpty()) {
+            return null;
+        }
+        try {
+            return LocalDateTime.parse(dateTime, dateTimeFormat);
+        } catch (NullPointerException | DateTimeParseException e) {
+            log.error("Error while parsing date time, format |yyyy-MM-ddTHH:mm:ss| : {}", dateTime, e);
+            return null;
+        }
     }
 }

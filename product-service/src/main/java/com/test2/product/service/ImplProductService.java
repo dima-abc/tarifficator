@@ -47,7 +47,7 @@ public class ImplProductService implements ProductService {
                     this.productMapper.mapToProduct(product, updateProduct);
                     product.increaseVersion();
                 }, () -> {
-                    throw new NoSuchElementException("product_service.update.errors.not.found");
+                    throw new NoSuchElementException("product_service.errors.update.not.found");
                 });
     }
 

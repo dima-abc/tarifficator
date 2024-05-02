@@ -22,7 +22,7 @@ import java.util.stream.Stream;
 @Slf4j
 public class ProductMapper {
     private final DateTimeFormatter dateFormat = DateTimeFormatter.ISO_DATE;
-    private final DateTimeFormatter dateTimeFormat = DateTimeFormatter.ISO_LOCAL_DATE_TIME;
+    private final DateTimeFormatter dateTimeFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
     public Product mapToProduct(NewProduct newProduct) {
         TypeProduct typeProduct = mapToTypeProduct(newProduct.getTypeProductId());
@@ -132,7 +132,7 @@ public class ProductMapper {
         try {
             return LocalDateTime.parse(dateTime, dateTimeFormat);
         } catch (NullPointerException | DateTimeParseException e) {
-            log.error("Error while parsing date time, format |yyyy-MM-ddTHH:mm:ss| : {}", dateTime, e);
+            log.error("Error while parsing date time, format |yyyy-MM-dd HH:mm:ss| : {}", dateTime, e);
             return null;
         }
     }

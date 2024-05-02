@@ -17,7 +17,7 @@ public class ProductVersionController {
     @GetMapping("/actual")
     public ProductDTO findActualProductVersion(@PathVariable("uuid") String uuid) {
         return this.productVersionService.findCurrentVersionProductById(uuid)
-                .orElseThrow(() -> new NoSuchElementException("product_service.error.product.not_found"));
+                .orElseThrow(() -> new NoSuchElementException("product_service.errors.not.found"));
     }
 
     @GetMapping("/previous")
@@ -37,6 +37,6 @@ public class ProductVersionController {
                                            @RequestParam("target-version") long targetVersion) {
         return this.productVersionService
                 .revertProductBeforeVersion(uuid, targetVersion)
-                .orElseThrow(() -> new NoSuchElementException("product_service.error.product.version_not_found"));
+                .orElseThrow(() -> new NoSuchElementException("product_service.errors.product.version_not_found"));
     }
 }

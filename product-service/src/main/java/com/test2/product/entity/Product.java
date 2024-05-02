@@ -31,7 +31,7 @@ public class Product {
     private LocalDate endDate;
     @Column(name = "description", nullable = false)
     private String description;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "tariff_id", nullable = false)
     private Tariff tariff;
     @Column(name = "author_id", nullable = false)

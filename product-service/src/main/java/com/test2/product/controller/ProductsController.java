@@ -5,6 +5,7 @@ import com.test2.product.payload.ProductDTO;
 import com.test2.product.service.ProductService;
 import com.test2.product.service.ProductVersionService;
 import com.test2.product.service.TariffService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindException;
@@ -28,7 +29,7 @@ public class ProductsController {
     }
 
     @PostMapping
-    public ResponseEntity<ProductDTO> createProduct(@RequestBody NewProduct newProduct,
+    public ResponseEntity<ProductDTO> createProduct(@Valid @RequestBody NewProduct newProduct,
                                                     BindingResult bindingResult,
                                                     UriComponentsBuilder uriComponentsBuilder) throws BindException {
         if (bindingResult.hasErrors()) {

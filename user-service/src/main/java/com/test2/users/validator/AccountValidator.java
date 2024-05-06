@@ -1,6 +1,6 @@
 package com.test2.users.validator;
 
-import com.test2.users.controller.payload.NewAccountPayload;
+import com.test2.users.controller.payload.NewAccount;
 import com.test2.users.entity.Platform;
 import com.test2.users.service.mapper.AccountMapper;
 import org.springframework.validation.Errors;
@@ -23,12 +23,12 @@ public class AccountValidator implements Validator {
 
     @Override
     public boolean supports(Class<?> clazz) {
-        return NewAccountPayload.class.equals(clazz);
+        return NewAccount.class.equals(clazz);
     }
 
     @Override
     public void validate(Object target, Errors errors) {
-        NewAccountPayload accountPayload = (NewAccountPayload) target;
+        NewAccount accountPayload = (NewAccount) target;
         validBankId(this.platform, accountPayload, errors);
         validFirstName(this.platform, accountPayload, errors);
         validLastName(this.platform, accountPayload, errors);
@@ -42,7 +42,7 @@ public class AccountValidator implements Validator {
         validAddressLife(this.platform, accountPayload, errors);
     }
 
-    public void validBankId(Platform platform, NewAccountPayload accountPayload, Errors errors) {
+    public void validBankId(Platform platform, NewAccount accountPayload, Errors errors) {
         if (platform.isBankId()) {
             UUID uuid = AccountMapper.mapToUUID(accountPayload.getBankId());
             if (uuid == null) {
@@ -51,7 +51,7 @@ public class AccountValidator implements Validator {
         }
     }
 
-    public void validFirstName(Platform platform, NewAccountPayload accountPayload, Errors errors) {
+    public void validFirstName(Platform platform, NewAccount accountPayload, Errors errors) {
         if (platform.isFirstName()
                 && (accountPayload.getFirstName() == null
                 || accountPayload.getFirstName().isBlank())) {
@@ -59,7 +59,7 @@ public class AccountValidator implements Validator {
         }
     }
 
-    public void validLastName(Platform platform, NewAccountPayload accountPayload, Errors errors) {
+    public void validLastName(Platform platform, NewAccount accountPayload, Errors errors) {
         if (platform.isLastName()
                 && (accountPayload.getLastName() == null
                 || accountPayload.getLastName().isBlank())) {
@@ -67,7 +67,7 @@ public class AccountValidator implements Validator {
         }
     }
 
-    public void validMiddleName(Platform platform, NewAccountPayload accountPayload, Errors errors) {
+    public void validMiddleName(Platform platform, NewAccount accountPayload, Errors errors) {
         if (platform.isMiddleName()
                 && (accountPayload.getMiddleName() == null
                 || accountPayload.getMiddleName().isBlank())) {
@@ -76,7 +76,7 @@ public class AccountValidator implements Validator {
     }
 
     public void validBirthDate(Platform platform,
-                               NewAccountPayload accountPayload,
+                               NewAccount accountPayload,
                                Errors errors, String regexp) {
         if (platform.isBirthDate()
                 && (accountPayload.getBirthDate() == null
@@ -92,7 +92,7 @@ public class AccountValidator implements Validator {
         }
     }
 
-    public void validPassport(Platform platform, NewAccountPayload accountPayload, Errors errors, String regexp) {
+    public void validPassport(Platform platform, NewAccount accountPayload, Errors errors, String regexp) {
         if (platform.isPassport()
                 && (accountPayload.getPassport() == null
                 || accountPayload.getPassport().isBlank()
@@ -107,7 +107,7 @@ public class AccountValidator implements Validator {
         }
     }
 
-    public void validPlaceBirth(Platform platform, NewAccountPayload accountPayload, Errors errors) {
+    public void validPlaceBirth(Platform platform, NewAccount accountPayload, Errors errors) {
         if (platform.isPlaceBirth()
                 && (accountPayload.getPlaceBirth() == null
                 || accountPayload.getPlaceBirth().isBlank())) {
@@ -115,7 +115,7 @@ public class AccountValidator implements Validator {
         }
     }
 
-    public void validPhone(Platform platform, NewAccountPayload accountPayload, Errors errors, String regexp) {
+    public void validPhone(Platform platform, NewAccount accountPayload, Errors errors, String regexp) {
         if (platform.isPhone()
                 && (accountPayload.getPhone() == null
                 || accountPayload.getPhone().isBlank()
@@ -130,7 +130,7 @@ public class AccountValidator implements Validator {
         }
     }
 
-    public void validEmail(Platform platform, NewAccountPayload accountPayload, Errors errors) {
+    public void validEmail(Platform platform, NewAccount accountPayload, Errors errors) {
         if (platform.isEmail()
                 && (accountPayload.getEmail() == null
                 || accountPayload.getEmail().isBlank())) {
@@ -138,7 +138,7 @@ public class AccountValidator implements Validator {
         }
     }
 
-    public void validAddressRegistered(Platform platform, NewAccountPayload accountPayload, Errors errors) {
+    public void validAddressRegistered(Platform platform, NewAccount accountPayload, Errors errors) {
         if (platform.isAddressRegistered()
                 && (accountPayload.getAddressRegistered() == null
                 || accountPayload.getAddressRegistered().isBlank())) {
@@ -146,7 +146,7 @@ public class AccountValidator implements Validator {
         }
     }
 
-    public void validAddressLife(Platform platform, NewAccountPayload accountPayload, Errors errors) {
+    public void validAddressLife(Platform platform, NewAccount accountPayload, Errors errors) {
         if (platform.isAddressLife()
                 && (accountPayload.getAddressLife() == null
                 || accountPayload.getAddressLife().isBlank())) {

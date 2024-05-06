@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -98,21 +99,23 @@ public class ImplProductVersionService implements ProductVersionService {
      * Откат на предыдущую версию продукта.
      *
      * @param id
-     * @param targetVersion
      * @return
      */
     @Transactional
     @Override
-    public Optional<ProductDTO> revertProductBeforeVersion(String id, long targetVersion) {
+    public Optional<ProductDTO> revertProductBeforeVersion(String id) {
         UUID uuid = this.productMapper.mapToUUID(id);
+        Revision<Long, Product> revisions = this.revisionRepository.findLastChangeRevision(uuid)
+                .orElseThrow(() -> new NoSuchElementException("product_service.errors.revision.not.found"));
+        Long rev = revisions.getRevisionNumber().map(r -> r - 1)
+                .orElse(0L);
         AuditQuery auditQuery = auditReader.createQuery()
                 .forRevisionsOfEntity(Product.class, true, true)
                 .add(AuditEntity.property("id").eq(uuid))
-                .add(AuditEntity.property("version").eq(targetVersion));
+                .add(AuditEntity.property("rev").eq(rev));
         Optional<Product> productBefore = auditQuery.getResultList().stream().findAny();
         Optional<Product> productRevert = Optional.empty();
         if (productBefore.isPresent()) {
-            productBefore.get().setVersion(targetVersion);
             productRevert = Optional.of(this.productRepository.save(productBefore.get()));
         }
         return productRevert

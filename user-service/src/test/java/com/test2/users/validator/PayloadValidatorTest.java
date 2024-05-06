@@ -1,9 +1,8 @@
 package com.test2.users.validator;
 
-import com.test2.users.controller.payload.NewAccountPayload;
+import com.test2.users.controller.payload.NewAccount;
 import com.test2.users.entity.Platform;
 import com.test2.users.service.PlatformService;
-import com.test2.users.validator.PayloadValidator;
 import org.junit.jupiter.api.Test;
 import org.springframework.validation.BindingResult;
 
@@ -36,7 +35,7 @@ class PayloadValidatorTest {
                 .findPlatformByName(HEADER_MAIL);
         PayloadValidator payloadValidator = new PayloadValidator(platformService);
         UUID bankId = UUID.randomUUID();
-        NewAccountPayload payload = NewAccountPayload.of()
+        NewAccount payload = NewAccount.of()
                 .bankId(bankId.toString())
                 .firstName("Petr")
                 .lastName("Vasin")
@@ -57,7 +56,7 @@ class PayloadValidatorTest {
                 .when(platformService)
                 .findPlatformByName(HEADER_BANK);
         PayloadValidator payloadValidator = new PayloadValidator(platformService);
-        NewAccountPayload payload = NewAccountPayload.of()
+        NewAccount payload = NewAccount.of()
                 .firstName("John")
                 .lastName("")
                 .build();
@@ -78,7 +77,7 @@ class PayloadValidatorTest {
                 .findPlatformByName(HEADER_GOSUSLUGI);
         PayloadValidator payloadValidator = new PayloadValidator(platformService);
         UUID bankId = UUID.randomUUID();
-        NewAccountPayload payload = NewAccountPayload.of()
+        NewAccount payload = NewAccount.of()
                 .bankId(bankId.toString())
                 .firstName("John")
                 .lastName("Doe")
@@ -91,7 +90,7 @@ class PayloadValidatorTest {
     public void test_valid_header_with_required_no_such_element_exception() {
         PayloadValidator payloadValidator = new PayloadValidator(platformService);
         UUID bankId = UUID.randomUUID();
-        NewAccountPayload payload = NewAccountPayload.of()
+        NewAccount payload = NewAccount.of()
                 .bankId(bankId.toString())
                 .firstName("John")
                 .lastName("Doe")

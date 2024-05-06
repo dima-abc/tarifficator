@@ -1,7 +1,6 @@
 package com.test2.users.controller;
 
-import com.test2.users.controller.AccountsRestController;
-import com.test2.users.controller.payload.NewAccountPayload;
+import com.test2.users.controller.payload.NewAccount;
 import com.test2.users.entity.Account;
 import com.test2.users.entity.Platform;
 import com.test2.users.service.AccountService;
@@ -99,7 +98,7 @@ class AccountsRestControllerTest {
                 .firstName(true)
                 .email(true)
                 .build();
-        NewAccountPayload payload = NewAccountPayload.of()
+        NewAccount payload = NewAccount.of()
                 .bankId(bankId)
                 .firstName("Ivan")
                 .email("ivan@mail.ru")
@@ -138,7 +137,7 @@ class AccountsRestControllerTest {
                 .firstName(true)
                 .email(true)
                 .build();
-        NewAccountPayload payload = NewAccountPayload.of()
+        NewAccount payload = NewAccount.of()
                 .firstName("Ivan")
                 .build();
         doReturn(Optional.of(platform)).when(platformService)

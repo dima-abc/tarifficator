@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder(builderMethodName = "of")
-public class NewAccountPayload {
+public class NewAccount {
     private String bankId;
     private String firstName;
     private String lastName;

@@ -25,6 +25,13 @@ public class ProductVersionController {
         return this.productVersionService.findPreviousVersionsProductById(uuid);
     }
 
+    /**
+     * Поиск версий продуктов за указанный период
+     * @param uuid String UUID id Product
+     * @param startPeriod String LocalDateTime "yyyy-DD-mm HH:mm:ss"
+     * @param endPeriod String LocalDateTime "yyyy-DD-mm HH:mm:ss"
+     * @return List<ProductDTO>
+     */
     @GetMapping("/period")
     public List<ProductDTO> findPeriodProductVersion(@PathVariable("uuid") String uuid,
                                                      @RequestParam("start-period") String startPeriod,
@@ -33,10 +40,9 @@ public class ProductVersionController {
     }
 
     @PostMapping("/revert")
-    public ProductDTO revertVersionProduct(@PathVariable("uuid") String uuid,
-                                           @RequestParam("target-version") long targetVersion) {
+    public ProductDTO revertVersionProduct(@PathVariable("uuid") String uuid) {
         return this.productVersionService
-                .revertProductBeforeVersion(uuid, targetVersion)
+                .revertProductBeforeVersion(uuid)
                 .orElseThrow(() -> new NoSuchElementException("product_service.errors.product.version_not_found"));
     }
 }

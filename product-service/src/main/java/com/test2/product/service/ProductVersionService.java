@@ -12,5 +12,5 @@ public interface ProductVersionService {
 
     List<ProductDTO> findBetweenDateProductById(String id, String startPeriod, String endPeriod);
 
-    Optional<ProductDTO> revertProductBeforeVersion(String id, long targetVersion);
+    Optional<ProductDTO> revertProductBeforeVersion(String id);
 }

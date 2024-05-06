@@ -1,6 +1,6 @@
 package com.test2.users.controller;
 
-import com.test2.users.controller.payload.NewAccountPayload;
+import com.test2.users.controller.payload.NewAccount;
 import com.test2.users.entity.Account;
 import com.test2.users.service.AccountService;
 import com.test2.users.service.mapper.AccountMapper;
@@ -35,9 +35,9 @@ public class AccountsRestController {
 
     @PostMapping(value = {"", "/"}, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> createAccount(@RequestHeader(X_SOURCE) String headerValue,
-                                           @RequestBody NewAccountPayload newAccountPayload,
+                                           @RequestBody NewAccount newAccount,
                                            UriComponentsBuilder uriComponentsBuilder) throws BindException {
-        BindingResult bindingResult = payloadValidator.isValid(headerValue, newAccountPayload);
+        BindingResult bindingResult = payloadValidator.isValid(headerValue, newAccount);
         if (bindingResult.hasErrors()) {
             if (bindingResult instanceof BindException exception) {
                 throw exception;
@@ -45,7 +45,7 @@ public class AccountsRestController {
                 throw new BindException(bindingResult);
             }
         } else {
-            Account accountNew = AccountMapper.mapToAccount(newAccountPayload);
+            Account accountNew = AccountMapper.mapToAccount(newAccount);
             Account account = this.accountService.createAccount(accountNew);
             return ResponseEntity
                     .created(uriComponentsBuilder

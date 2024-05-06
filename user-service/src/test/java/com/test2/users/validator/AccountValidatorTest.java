@@ -1,8 +1,7 @@
 package com.test2.users.validator;
 
-import com.test2.users.controller.payload.NewAccountPayload;
+import com.test2.users.controller.payload.NewAccount;
 import com.test2.users.entity.Platform;
-import com.test2.users.validator.AccountValidator;
 import org.junit.jupiter.api.Test;
 import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.Errors;
@@ -19,7 +18,7 @@ class AccountValidatorTest {
         platform.setFirstName(true);
         platform.setLastName(true);
         AccountValidator validator = new AccountValidator(platform);
-        NewAccountPayload payload = new NewAccountPayload();
+        NewAccount payload = new NewAccount();
         payload.setFirstName("Ivan");
         payload.setLastName("Ivanov");
         Errors errors = new BeanPropertyBindingResult(payload, "payload");
@@ -42,7 +41,7 @@ class AccountValidatorTest {
         platform.setAddressRegistered(false);
         platform.setAddressLife(false);
         AccountValidator validator = new AccountValidator(platform);
-        NewAccountPayload payload = new NewAccountPayload();
+        NewAccount payload = new NewAccount();
         payload.setBankId(null);
         payload.setFirstName(null);
         payload.setLastName(null);
@@ -65,7 +64,7 @@ class AccountValidatorTest {
         platform.setBankId(true);
         platform.setFirstName(true);
         AccountValidator validator = new AccountValidator(platform);
-        NewAccountPayload payload = new NewAccountPayload();
+        NewAccount payload = new NewAccount();
         UUID bankId = UUID.randomUUID();
         payload.setBankId(bankId.toString());
         payload.setFirstName("Misha");
@@ -89,7 +88,7 @@ class AccountValidatorTest {
         platform.setAddressRegistered(true);
         platform.setAddressLife(true);
         AccountValidator validator = new AccountValidator(platform);
-        NewAccountPayload payload = new NewAccountPayload();
+        NewAccount payload = new NewAccount();
         UUID bankId = UUID.randomUUID();
         payload.setBankId(bankId.toString());
         payload.setFirstName("Misha");
@@ -122,7 +121,7 @@ class AccountValidatorTest {
         platform.setAddressRegistered(true);
         platform.setAddressLife(true);
         AccountValidator validator = new AccountValidator(platform);
-        NewAccountPayload payload = new NewAccountPayload();
+        NewAccount payload = new NewAccount();
         UUID bankId = UUID.randomUUID();
         payload.setBankId(bankId.toString());
         payload.setFirstName("Misha");
@@ -155,7 +154,7 @@ class AccountValidatorTest {
         platform.setAddressRegistered(true);
         platform.setAddressLife(true);
         AccountValidator validator = new AccountValidator(platform);
-        NewAccountPayload payload = new NewAccountPayload();
+        NewAccount payload = new NewAccount();
         Errors errors = new BeanPropertyBindingResult(payload, "payload");
         validator.validate(payload, errors);
         assertTrue(errors.hasErrors());
@@ -177,7 +176,7 @@ class AccountValidatorTest {
         platform.setAddressRegistered(true);
         platform.setAddressLife(true);
         AccountValidator validator = new AccountValidator(platform);
-        NewAccountPayload payload = new NewAccountPayload();
+        NewAccount payload = new NewAccount();
         UUID bankId = UUID.randomUUID();
         payload.setBankId(bankId.toString());
         payload.setFirstName("Misha");

@@ -1,6 +1,6 @@
 package com.test2.users.validator;
 
-import com.test2.users.controller.payload.NewAccountPayload;
+import com.test2.users.controller.payload.NewAccount;
 import com.test2.users.entity.Platform;
 import com.test2.users.service.PlatformService;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +20,7 @@ public class PayloadValidator {
                 .orElseThrow(() -> new NoSuchElementException("customer.errors.platform.not_found"));
     }
 
-    public BindingResult isValid(String header, NewAccountPayload payload) {
+    public BindingResult isValid(String header, NewAccount payload) {
         final Platform platform = getPlatform(header);
         final AccountValidator validator = new AccountValidator(platform);
         final DataBinder dataBinder = new DataBinder(payload);

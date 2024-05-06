@@ -1,6 +1,6 @@
 package com.test2.users.service.mapper;
 
-import com.test2.users.controller.payload.NewAccountPayload;
+import com.test2.users.controller.payload.NewAccount;
 import com.test2.users.entity.Account;
 import lombok.extern.slf4j.Slf4j;
 
@@ -10,24 +10,24 @@ import java.util.UUID;
 
 @Slf4j
 public class AccountMapper {
-    public static Account mapToAccount(NewAccountPayload newAccountPayload) {
-        if (newAccountPayload == null) {
+    public static Account mapToAccount(NewAccount newAccount) {
+        if (newAccount == null) {
             return null;
         }
-        LocalDate birthDate = newAccountPayload.getBirthDate() != null ? mapToLocalDate(newAccountPayload.getBirthDate()) : null;
-        UUID bankId = mapToUUID(newAccountPayload.getBankId());
+        LocalDate birthDate = newAccount.getBirthDate() != null ? mapToLocalDate(newAccount.getBirthDate()) : null;
+        UUID bankId = mapToUUID(newAccount.getBankId());
         return Account.of()
                 .bankId(bankId)
-                .lastName(newAccountPayload.getLastName())
-                .firstName(newAccountPayload.getFirstName())
-                .middleName(newAccountPayload.getMiddleName())
+                .lastName(newAccount.getLastName())
+                .firstName(newAccount.getFirstName())
+                .middleName(newAccount.getMiddleName())
                 .birthDate(birthDate)
-                .passport(newAccountPayload.getPassport())
-                .placeBirth(newAccountPayload.getPlaceBirth())
-                .phone(newAccountPayload.getPhone())
-                .email(newAccountPayload.getEmail())
-                .addressRegistered(newAccountPayload.getAddressRegistered())
-                .addressLife(newAccountPayload.getAddressLife())
+                .passport(newAccount.getPassport())
+                .placeBirth(newAccount.getPlaceBirth())
+                .phone(newAccount.getPhone())
+                .email(newAccount.getEmail())
+                .addressRegistered(newAccount.getAddressRegistered())
+                .addressLife(newAccount.getAddressLife())
                 .build();
     }
 

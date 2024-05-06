@@ -1,8 +1,7 @@
 package com.test2.users.service.mapper;
 
-import com.test2.users.controller.payload.NewAccountPayload;
+import com.test2.users.controller.payload.NewAccount;
 import com.test2.users.entity.Account;
-import com.test2.users.service.mapper.AccountMapper;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
@@ -14,7 +13,7 @@ class AccountMapperTest {
     @Test
     void mapToAccountThenReturnAccount() {
         UUID bankId = UUID.randomUUID();
-        NewAccountPayload accountPayload = NewAccountPayload.of()
+        NewAccount accountPayload = NewAccount.of()
                 .bankId(bankId.toString())
                 .lastName("Ivanov")
                 .firstName("Ivan")

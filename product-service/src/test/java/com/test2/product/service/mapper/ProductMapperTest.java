@@ -40,7 +40,6 @@ class ProductMapperTest {
                 .endDate("2025-05-01")
                 .description("Product Description")
                 .tariffId(uuid.toString())
-                .tariffVersion(2L)
                 .authorId(uuid.toString())
                 .build();
         Product actual = this.productMapper.mapToProduct(newProduct);
@@ -77,10 +76,9 @@ class ProductMapperTest {
                 .endDate("2025-05-01")
                 .description("new Product Description")
                 .tariffId(uuid.toString())
-                .tariffVersion(3L)
                 .authorId(uuid.toString())
                 .build();
-        this.productMapper.mapToProduct(product, updateProduct);
+        this.productMapper.mapToProduct(product, updateProduct, expect.getTariff());
         assertEquals(expect, product);
     }
 
@@ -108,7 +106,7 @@ class ProductMapperTest {
                 .authorId(uuid)
                 .build();
         UpdateProduct updateProduct = new UpdateProduct();
-        this.productMapper.mapToProduct(product, updateProduct);
+        this.productMapper.mapToProduct(product, updateProduct, expect.getTariff());
         assertEquals(expect, product);
     }
 

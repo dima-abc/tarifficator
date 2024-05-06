@@ -11,6 +11,7 @@ import java.util.UUID;
 import static org.junit.jupiter.api.Assertions.*;
 
 class TariffMapperTest {
+    private final TariffMapper tariffMapper = new TariffMapper();
 
     @Test
     void mapToTariff_By_NewTariff_Returns_Tariff() {
@@ -23,7 +24,7 @@ class TariffMapperTest {
                 .description("description")
                 .rate(20D)
                 .build();
-        Tariff actual = TariffMapper.mapToTariff(newTariff);
+        Tariff actual = tariffMapper.mapToTariff(newTariff);
         assertEquals(expected, actual);
     }
 
@@ -36,7 +37,7 @@ class TariffMapperTest {
                 .description("description")
                 .rate(20D)
                 .build();
-        Tariff actual = TariffMapper.mapToTariff(newTariff);
+        Tariff actual = tariffMapper.mapToTariff(newTariff);
         assertEquals(expected, actual);
     }
 
@@ -50,7 +51,7 @@ class TariffMapperTest {
                 .startDate("2024-04-24")
                 .endDate("2025-04-24")
                 .build();
-        TariffMapper.mapToTariff(tariff, updateTariff);
+        tariffMapper.mapToTariff(tariff, updateTariff);
         assertEquals("new Name", tariff.getName());
         assertEquals("2024-04-24", tariff.getStartDate().toString());
         assertEquals("2025-04-24", tariff.getEndDate().toString());
@@ -62,7 +63,7 @@ class TariffMapperTest {
                 .name("old name")
                 .build();
         UpdateTariff updateTariff = new UpdateTariff();
-        TariffMapper.mapToTariff(tariff, updateTariff);
+        tariffMapper.mapToTariff(tariff, updateTariff);
         assertEquals("old name", tariff.getName());
     }
 
@@ -76,7 +77,7 @@ class TariffMapperTest {
         UpdateTariff updateTariff = UpdateTariff.of()
                 .startDate("2023-04-24")
                 .build();
-        TariffMapper.mapToTariff(tariff, updateTariff);
+        tariffMapper.mapToTariff(tariff, updateTariff);
         assertEquals(updateTariff.getStartDate(), tariff.getStartDate().toString());
         assertEquals(tariff.getEndDate(), LocalDate.of(2025, 4, 24));
     }
@@ -92,7 +93,7 @@ class TariffMapperTest {
         UpdateTariff updateTariff = UpdateTariff.of()
                 .description("new description")
                 .build();
-        TariffMapper.mapToTariff(tariff, updateTariff);
+        tariffMapper.mapToTariff(tariff, updateTariff);
         assertEquals("new description", tariff.getDescription());
     }
 
@@ -104,7 +105,7 @@ class TariffMapperTest {
         UpdateTariff updateTariff = UpdateTariff.of()
                 .rate(20D)
                 .build();
-        TariffMapper.mapToTariff(tariff, updateTariff);
+        tariffMapper.mapToTariff(tariff, updateTariff);
         assertEquals(20D, tariff.getRate());
     }
 
@@ -112,14 +113,14 @@ class TariffMapperTest {
     void mapToDate_Return_LocalDate() {
         LocalDate expectedDate = LocalDate.of(2024, 4, 24);
         String dateIn = "2024-04-24";
-        LocalDate actualDate = TariffMapper.mapToDate(dateIn);
+        LocalDate actualDate = tariffMapper.mapToDate(dateIn);
         assertEquals(expectedDate, actualDate);
     }
 
     @Test
     void mapToLocalDate_Return_Null() {
         String dateIn = "abc";
-        LocalDate localDate = TariffMapper.mapToDate(dateIn);
+        LocalDate localDate = tariffMapper.mapToDate(dateIn);
         assertNull(localDate);
     }
 
@@ -127,14 +128,14 @@ class TariffMapperTest {
     void mapToUUID_Return_UUID() {
         UUID uuidExpect = UUID.randomUUID();
         String uuidIn = uuidExpect.toString();
-        UUID actual = TariffMapper.mapToUUID(uuidIn);
+        UUID actual = tariffMapper.mapToUUID(uuidIn);
         assertEquals(uuidExpect, actual);
     }
 
     @Test
     void mapToUUID_Return_Null() {
         String uuidIn = "abcd";
-        UUID actual = TariffMapper.mapToUUID(uuidIn);
+        UUID actual = tariffMapper.mapToUUID(uuidIn);
         assertNull(actual);
     }
 }

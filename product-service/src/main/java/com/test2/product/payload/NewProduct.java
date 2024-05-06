@@ -27,7 +27,6 @@ public class NewProduct {
     private String description;
     @NotBlank(message = "{product_service.create.errors.tariff_id_is_null}")
     private String tariffId;
-    private long tariffVersion;
     @NotBlank(message = "{product_service.create.errors.author_id_is_null}")
     private String authorId;
 }

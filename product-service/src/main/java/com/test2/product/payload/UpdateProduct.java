@@ -24,6 +24,5 @@ public class UpdateProduct {
     @Size(min = 5, message = "{product_service.create.errors.description_size_is_invalid}")
     private String description;
     private String tariffId;
-    private long tariffVersion;
     private String authorId;
 }

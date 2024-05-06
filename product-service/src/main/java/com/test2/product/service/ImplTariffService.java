@@ -1,33 +1,35 @@
 package com.test2.product.service;
 
 import com.test2.product.entity.Tariff;
+import com.test2.product.payload.TariffDTO;
 import com.test2.product.repository.TariffRepository;
+import com.test2.product.service.mapper.ProductMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
 public class ImplTariffService implements TariffService {
     private final TariffRepository tariffRepository;
+    private final ProductMapper productMapper;
 
     @Transactional
     @Override
-    public Tariff createTariff(Tariff tariff) {
-        return this.tariffRepository.save(tariff);
+    public TariffDTO createTariff(TariffDTO tariff) {
+        UUID uuid = productMapper.mapToUUID(tariff.getId());
+        Tariff newTariff = new Tariff(uuid, tariff.version);
+        this.tariffRepository.save(newTariff);
+        return tariff;
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     @Override
-    public void updateTariff(Tariff tariff) {
-        this.tariffRepository.save(tariff);
-    }
-
-    @Override
-    public void deleteTariffById(String tariffId) {
-        UUID uuid = UUID.fromString(tariffId);
-        this.tariffRepository.deleteById(uuid);
+    public Optional<Tariff> getTariffById(String id) {
+        UUID uuidTariff = productMapper.mapToUUID(id);
+        return this.tariffRepository.findById(uuidTariff);
     }
 }

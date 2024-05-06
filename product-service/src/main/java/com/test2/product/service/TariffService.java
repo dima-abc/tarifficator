@@ -1,11 +1,12 @@
 package com.test2.product.service;
 
 import com.test2.product.entity.Tariff;
+import com.test2.product.payload.TariffDTO;
+
+import java.util.Optional;
 
 public interface TariffService {
-    Tariff createTariff(Tariff tariff);
+    TariffDTO createTariff(TariffDTO tariff);
 
-    void updateTariff(Tariff tariff);
-
-    void deleteTariffById(String tariffId);
+    Optional<Tariff> getTariffById(String id);
 }

@@ -1,7 +1,7 @@
 package com.test2.tariff.controller;
 
-import com.test2.tariff.entity.Tariff;
 import com.test2.tariff.payload.NewTariff;
+import com.test2.tariff.payload.TariffDTO;
 import com.test2.tariff.service.TariffService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +21,7 @@ public class TariffsController {
     private final TariffService tariffService;
 
     @GetMapping({"", "/"})
-    public Iterable<Tariff> findAllTariff() {
+    public Iterable<TariffDTO> findAllTariff() {
         return tariffService.findAllTariffs();
     }
 
@@ -36,7 +36,7 @@ public class TariffsController {
                 throw new BindException(bindingResult);
             }
         } else {
-            Tariff tariff = this.tariffService.createTariff(newTariff);
+            TariffDTO tariff = this.tariffService.createTariff(newTariff);
             return ResponseEntity
                     .created(uriComponentsBuilder
                             .replacePath("/api/v1/tariffs/{tariffId}")

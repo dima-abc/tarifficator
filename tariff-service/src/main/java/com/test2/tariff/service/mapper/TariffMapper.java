@@ -1,20 +1,23 @@
 package com.test2.tariff.service.mapper;
 
 import com.test2.tariff.payload.NewTariff;
+import com.test2.tariff.payload.TariffDTO;
 import com.test2.tariff.payload.UpdateTariff;
 import com.test2.tariff.entity.Tariff;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.UUID;
 
+@Component
 @Slf4j
 public class TariffMapper {
-    private static final DateTimeFormatter dateFormat = DateTimeFormatter.ISO_DATE;
+    private final DateTimeFormatter dateFormat = DateTimeFormatter.ISO_DATE;
 
-    public static Tariff mapToTariff(NewTariff newTariff) {
+    public Tariff mapToTariff(NewTariff newTariff) {
         return Tariff.of()
                 .name(newTariff.getName())
                 .startDate(mapToDate(newTariff.getStartDate()))
@@ -24,7 +27,19 @@ public class TariffMapper {
                 .build();
     }
 
-    public static void mapToTariff(Tariff tariff, UpdateTariff updateTariff) {
+    public TariffDTO mapToTariffDTO(Tariff tariff) {
+        return TariffDTO.of()
+                .id(tariff.getId().toString())
+                .name(tariff.getName())
+                .startDate(tariff.getStartDate().toString())
+                .endDate(tariff.getEndDate().toString())
+                .description(tariff.getDescription())
+                .rate(tariff.getRate())
+                .version(tariff.getVersion())
+                .build();
+    }
+
+    public void mapToTariff(Tariff tariff, UpdateTariff updateTariff) {
         LocalDate startDate = mapToDate(updateTariff.getStartDate());
         LocalDate endDate = mapToDate(updateTariff.getEndDate());
         tariff.setName(
@@ -40,7 +55,7 @@ public class TariffMapper {
     }
 
 
-    public static UUID mapToUUID(String id) {
+    public UUID mapToUUID(String id) {
         if (id == null || id.isEmpty()) {
             return null;
         }
@@ -52,7 +67,7 @@ public class TariffMapper {
         }
     }
 
-    public static LocalDate mapToDate(String date) {
+    public LocalDate mapToDate(String date) {
         if (date == null || date.isEmpty()) {
             return null;
         }

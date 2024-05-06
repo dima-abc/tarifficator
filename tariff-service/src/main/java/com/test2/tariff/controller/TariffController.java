@@ -1,6 +1,6 @@
 package com.test2.tariff.controller;
 
-import com.test2.tariff.entity.Tariff;
+import com.test2.tariff.payload.TariffDTO;
 import com.test2.tariff.payload.UpdateTariff;
 import com.test2.tariff.service.ImplTariffService;
 import jakarta.validation.Valid;
@@ -25,13 +25,13 @@ public class TariffController {
     private final MessageSource messageSource;
 
     @ModelAttribute("tariff")
-    public Tariff getTariff(@PathVariable("tariffId") String tariffId) {
+    public TariffDTO getTariff(@PathVariable("tariffId") String tariffId) {
         return this.tariffService.findTariffById(tariffId)
                 .orElseThrow(() -> new NoSuchElementException("tariff_service.errors.not.found"));
     }
 
     @GetMapping
-    public Tariff findTariff(@ModelAttribute("tariff") Tariff tariff) {
+    public TariffDTO findTariff(@ModelAttribute("tariff") TariffDTO tariff) {
         return tariff;
     }
 

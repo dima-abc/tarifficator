@@ -28,7 +28,6 @@ public class ProductMapper {
         TypeProduct typeProduct = mapToTypeProduct(newProduct.getTypeProductId());
         LocalDate startDate = mapToDate(newProduct.getStartDate());
         LocalDate endDate = mapToDate(newProduct.getEndDate());
-        Tariff tariff = mapToTariff(newProduct.getTariffId(), newProduct.getTariffVersion());
         UUID authorId = mapToUUID(newProduct.getAuthorId());
         return Product.of()
                 .name(newProduct.getName())
@@ -36,16 +35,14 @@ public class ProductMapper {
                 .startDate(startDate)
                 .endDate(endDate)
                 .description(newProduct.getDescription())
-                .tariff(tariff)
                 .authorId(authorId)
                 .build();
     }
 
-    public void mapToProduct(Product product, UpdateProduct updateProduct) {
+    public void mapToProduct(Product product, UpdateProduct updateProduct, Tariff tariff) {
         TypeProduct typeProduct = mapToTypeProduct(updateProduct.getTypeProductId());
         LocalDate startDate = mapToDate(updateProduct.getStartDate());
         LocalDate endDate = mapToDate(updateProduct.getEndDate());
-        Tariff tariff = mapToTariff(updateProduct.getTariffId(), updateProduct.getTariffVersion());
         UUID authorId = mapToUUID(updateProduct.getAuthorId());
         product.setName(updateProduct.getName() != null ? updateProduct.getName() : product.getName());
         product.setTypeProduct(typeProduct != null ? typeProduct : product.getTypeProduct());

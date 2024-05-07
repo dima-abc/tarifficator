@@ -7,7 +7,7 @@
     <version>0.0.1-SNAPSHOT</version>
     <packaging>pom</packaging>
     <modules>
-        <module>user-service</module>
+        <module>account-service</module>
         <module>tariff-service</module>
         <module>product-service</module>
         <module>client-service</module>

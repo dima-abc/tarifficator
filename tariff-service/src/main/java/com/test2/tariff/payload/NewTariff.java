@@ -23,7 +23,7 @@ public class NewTariff {
     @Pattern(regexp = "^\\d{4}-\\d{2}-\\d{2}", message = "{tariff_service.create.errors.date_format}")
     private String endDate;
     @NotNull(message = "{tariff_service.create.errors.description_is_null}")
-    @Size(min = 5, message = "{tariff_service.create.errors.description_size_is_invalid}")
+    @Size(min = 5, max = 255, message = "{tariff_service.create.errors.description_size_is_invalid}")
     private String description;
     private Double rate;
 }

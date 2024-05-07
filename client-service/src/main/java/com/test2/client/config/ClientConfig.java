@@ -3,7 +3,7 @@ package com.test2.client.config;
 import com.test2.client.service.WebClientProduct;
 import com.test2.client.service.WebClientProductVersion;
 import com.test2.client.service.WebClientTariff;
-import com.test2.client.service.WebClientUser;
+import com.test2.client.service.WebClientAccount;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,10 +19,10 @@ public class ClientConfig {
     }
 
     @Bean
-    public WebClientUser webClientUser(
+    public WebClientAccount webClientUser(
             @Value("${bank.user.service.uri:http://localhost:8081}") String userBaseUrl,
             WebClient.Builder clientServiceBuilder) {
-        return new WebClientUser(clientServiceBuilder
+        return new WebClientAccount(clientServiceBuilder
                 .baseUrl(userBaseUrl)
                 .build());
     }

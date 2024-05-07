@@ -1,3 +1,4 @@
+name: backend
 version: '3.8'
 services:
   zookeeper:
@@ -9,6 +10,7 @@ services:
       - "2181:2181"
 
   kafka:
+    container_name: kafka
     image: confluentinc/cp-kafka:latest
     depends_on:
       - zookeeper
@@ -23,9 +25,9 @@ services:
       KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
     ports:
       - "9092:9092"
-  postgres:
+  tarifficator-db:
     image: 'postgres:14'
-    container_name: 'tarifficator_app'
+    container_name: tarifficator-db
     ports:
       - "5432:5432"
     environment:
@@ -33,3 +35,65 @@ services:
       - 'POSTGRES_PASSWORD=password'
       - 'POSTGRES_HOST_AUTH_METHOD=trust'
       - 'POSTGRES_DB=tarifficator'
+  account-service:
+    container_name: account-service
+    ports:
+      - "8081:8081"
+    restart: always
+    build:
+      dockerfile: Dockerfile
+      args:
+        JAR_FILE: account-service/target/account-service-0.0.1-SNAPSHOT-exec.jar
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://tarifficator-db:5432/tarifficator
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=password
+    depends_on:
+      - tarifficator-db
+  tariff-service:
+    container_name: tariff-service
+    ports:
+      - "8082:8082"
+    restart: always
+    build:
+      dockerfile: Dockerfile
+      args:
+        JAR_FILE: tariff-service/target/tariff-service-0.0.1-SNAPSHOT-exec.jar
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://tarifficator-db:5432/tarifficator
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=password
+      - KAFKA_BOOTSTRAP_SERVERS=kafka:29092
+    depends_on:
+      - tarifficator-db
+      - kafka
+  product-service:
+    container_name: product-service
+    ports:
+      - "8083:8083"
+    restart: always
+    build:
+      dockerfile: Dockerfile
+      args:
+        JAR_FILE: product-service/target/product-service-0.0.1-SNAPSHOT-exec.jar
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://tarifficator-db:5432/tarifficator
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=password
+      - KAFKA_BOOTSTRAP_SERVERS=kafka:29092
+    depends_on:
+      - tarifficator-db
+      - kafka
+  client-service:
+    container_name: client-service
+    ports:
+      - "8084:8084"
+    restart: always
+    build:
+      dockerfile: Dockerfile
+      args:
+        JAR_FILE: client-service/target/client-service-0.0.1-SNAPSHOT-exec.jar
+    environment:
+      - BANK_USER_SERVICE_URI=http://account-service:8081
+      - BANK_TARIFF_SERVICE_URI=http://tariff-service:8082
+      - BANK_PRODUCT_SERVICE_URI=http://product-service:8083

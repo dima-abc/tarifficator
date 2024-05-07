@@ -9,7 +9,7 @@ public interface ProductVersionClientService {
 
     Flux<ProductDTO> findPreviousProductVersion(String id);
 
-    Flux<ProductDTO> findPeriodProductVersion(String id, String startDate, String endDate);
+    Flux<ProductDTO> findPeriodProductVersion(String id, String startPeriod, String endPeriod);
 
     Mono<ProductDTO> revertVersionProduct(String id);
 }

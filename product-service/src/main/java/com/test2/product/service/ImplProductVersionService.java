@@ -4,6 +4,7 @@ import com.test2.product.entity.Product;
 import com.test2.product.payload.ProductDTO;
 import com.test2.product.repository.ProductRepository;
 import com.test2.product.repository.ProductRevisionRepository;
+import com.test2.product.service.kafka.KafkaSendService;
 import com.test2.product.service.mapper.ProductMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,10 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 @Slf4j
@@ -29,6 +27,8 @@ public class ImplProductVersionService implements ProductVersionService {
     private final ProductRepository productRepository;
     private final AuditReader auditReader;
     private final ProductMapper productMapper;
+    private static final String TOPIC_PRODUCT = "topic.product";
+    private final KafkaSendService<String, ProductDTO> kafkaSendService;
 
     /**
      * Метод получает актуальную версию продукта.
@@ -107,16 +107,21 @@ public class ImplProductVersionService implements ProductVersionService {
         UUID uuid = this.productMapper.mapToUUID(id);
         Revision<Long, Product> revisions = this.revisionRepository.findLastChangeRevision(uuid)
                 .orElseThrow(() -> new NoSuchElementException("product_service.errors.revision.not.found"));
-        Long rev = revisions.getRevisionNumber().map(r -> r - 1)
-                .orElse(0L);
+        Product product = revisions.getEntity();
+        long versionRevert = product.getVersion() - 1;
         AuditQuery auditQuery = auditReader.createQuery()
                 .forRevisionsOfEntity(Product.class, true, true)
                 .add(AuditEntity.property("id").eq(uuid))
-                .add(AuditEntity.property("rev").eq(rev));
+                .add(AuditEntity.property("version").eq(versionRevert));
         Optional<Product> productBefore = auditQuery.getResultList().stream().findAny();
         Optional<Product> productRevert = Optional.empty();
         if (productBefore.isPresent()) {
             productRevert = Optional.of(this.productRepository.save(productBefore.get()));
+            productRevert.ifPresent(
+                    p -> this.kafkaSendService
+                            .sendMessage(TOPIC_PRODUCT,
+                                    p.getId().toString(),
+                                    productMapper.mapToProductDTO(p)));
         }
         return productRevert
                 .map(productMapper::mapToProductDTO);

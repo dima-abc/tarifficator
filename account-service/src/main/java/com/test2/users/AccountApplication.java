@@ -10,7 +10,7 @@ public class AccountApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(AccountApplication.class, args);
-        log.info("GO TO: http://localhost:8081/api/v1/accounts");
+        log.info("GO TO: http://localhost:8081/swagger-ui/index.html");
     }
 
 }

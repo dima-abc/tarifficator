@@ -9,6 +9,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class ClientApplication {
     public static void main(String[] args) {
         SpringApplication.run(ClientApplication.class, args);
-        log.info("GO TO BANK_CLIENT http://localhost:8084/api/v1/client");
+        log.info("GO TO BANK_CLIENT http://localhost:8084/swagger-ui/index.html");
     }
 }

@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder(builderMethodName = "of")
 public class NewTariff {
-    @NotNull(message = "{tariff-service.create.errors.name_is_null}")
+    @NotNull(message = "{tariff_service.create.errors.name_is_null}")
     @Size(min = 3, max = 255, message = "{tariff-service.create.errors.name_size_is_invalid}")
     private String name;
     @NotNull(message = "{tariff_service.create.errors.start_date_is_null}")

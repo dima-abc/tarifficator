@@ -27,9 +27,10 @@ public class ProductVersionController {
 
     /**
      * Поиск версий продуктов за указанный период
-     * @param uuid String UUID id Product
+     *
+     * @param uuid        String UUID id Product
      * @param startPeriod String LocalDateTime "yyyy-DD-mm HH:mm:ss"
-     * @param endPeriod String LocalDateTime "yyyy-DD-mm HH:mm:ss"
+     * @param endPeriod   String LocalDateTime "yyyy-DD-mm HH:mm:ss"
      * @return List<ProductDTO>
      */
     @GetMapping("/period")

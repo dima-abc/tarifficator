@@ -10,7 +10,7 @@ public class ProductApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(ProductApplication.class, args);
-        log.info("GO TO PRODUCT http://localhost:8083/api/v1/products");
+        log.info("GO TO PRODUCT http://localhost:8083/swagger-ui/index.html");
     }
 
 }

@@ -1,15 +1,4 @@
-### Запуск приложения
-
-- Требования Java 17, Maven 3.9.6, git, docker, docker-compose <br>
-- Клонируйте проект командой git
-  clone [тестовое задание](https://github.com/dima-abc/customeraccounts.git) <br>
-- При помощи docker-compose.yaml разверните контейнер баз данных postgres <br>
-- Перейди в корень проекта и соберите проект командой: <br>
-  <b> mvn -DskipTests package </b> <br>
-- После успешной сборки проекта перейдите в каталог собранного проекта target и запустите приложение командой: <br>
-  """java -jar customeraccounts-0.0.1.jar""" <br>
-
----
+## СЕРВИС АККАУНТОВ
 
 ### Swagger
 

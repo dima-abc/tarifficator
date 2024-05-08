@@ -30,6 +30,9 @@ public class ImplTariffService implements TariffService {
     @Override
     public Optional<Tariff> getTariffById(String id) {
         UUID uuidTariff = productMapper.mapToUUID(id);
+        if (uuidTariff == null) {
+            return Optional.empty();
+        }
         return this.tariffRepository.findById(uuidTariff);
     }
 }

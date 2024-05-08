@@ -8,5 +8,5 @@ import java.util.List;
 import java.util.UUID;
 
 public interface ProductRepository extends JpaRepository<Product, UUID> {
-    List<Product> findAllByTariff(UUID tariffId, Pageable pageable);
+    List<Product> findAllByTariffId(UUID tariffId, Pageable pageable);
 }

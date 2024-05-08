@@ -26,9 +26,9 @@ public class ImplProductVersionService implements ProductVersionService {
     private final ProductRevisionRepository revisionRepository;
     private final ProductRepository productRepository;
     private final AuditReader auditReader;
-    private final ProductMapper productMapper;
-    private static final String TOPIC_PRODUCT = "topic.product";
     private final KafkaSendService<String, ProductDTO> kafkaSendService;
+    private static final String TOPIC_PRODUCT = "topic.product";
+    private final ProductMapper productMapper;
 
     /**
      * Метод получает актуальную версию продукта.
@@ -73,10 +73,10 @@ public class ImplProductVersionService implements ProductVersionService {
     /**
      * Выборка ревизий за промежуток дат.
      *
-     * @param id
-     * @param startPeriod
-     * @param endPeriod
-     * @return
+     * @param id          UUID Product
+     * @param startPeriod Start period yyyy-mm-dd HH:mm:ss
+     * @param endPeriod   End period yyyy-mm-dd HH:mm:ss
+     * @return List
      */
     @Override
     public List<ProductDTO> findBetweenDateProductById(String id, String startPeriod, String endPeriod) {
@@ -98,8 +98,8 @@ public class ImplProductVersionService implements ProductVersionService {
     /**
      * Откат на предыдущую версию продукта.
      *
-     * @param id
-     * @return
+     * @param id UUID Product
+     * @return Optional
      */
     @Transactional
     @Override

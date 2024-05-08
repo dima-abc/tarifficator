@@ -3,8 +3,6 @@ package com.test2.product.controller;
 import com.test2.product.payload.NewProduct;
 import com.test2.product.payload.ProductDTO;
 import com.test2.product.service.ProductService;
-import com.test2.product.service.ProductVersionService;
-import com.test2.product.service.TariffService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -20,8 +18,6 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class ProductsController {
     private final ProductService productService;
-    private final TariffService tariffService;
-    private final ProductVersionService versionService;
 
     @GetMapping({"", "/"})
     public Iterable<ProductDTO> findAllProducts() {

@@ -2,7 +2,7 @@ package com.test2.tariff.controller;
 
 import com.test2.tariff.payload.TariffDTO;
 import com.test2.tariff.payload.UpdateTariff;
-import com.test2.tariff.service.ImplTariffService;
+import com.test2.tariff.service.TariffService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.MessageSource;
@@ -21,7 +21,7 @@ import java.util.Objects;
 @RequestMapping("api/v1/tariffs/{tariffId}")
 @RequiredArgsConstructor
 public class TariffController {
-    private final ImplTariffService tariffService;
+    private final TariffService tariffService;
     private final MessageSource messageSource;
 
     @ModelAttribute("tariff")

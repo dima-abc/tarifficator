@@ -40,6 +40,14 @@ class ImplTariffServiceTest {
     private final String topicTariff = "topic.tariff";
 
     @Test
+    void dependencyNotNull() {
+        assertNotNull(tariffService);
+        assertNotNull(tariffRepository);
+        assertNotNull(kafkaService);
+        assertNotNull(tariffMapper);
+    }
+
+    @Test
     void createTariff_return_Tariff() {
         UUID uuid = UUID.randomUUID();
         NewTariff newTariff = NewTariff.of()

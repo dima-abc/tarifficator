@@ -5,7 +5,6 @@ import com.test2.product.payload.UpdateProduct;
 import com.test2.product.service.ProductService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.MessageSource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
@@ -18,7 +17,6 @@ import java.util.NoSuchElementException;
 @RequiredArgsConstructor
 public class ProductController {
     private final ProductService productService;
-    private final MessageSource messageSource;
 
     @ModelAttribute("product")
     public ProductDTO getProduct(@PathVariable("uuid") String uuid) {

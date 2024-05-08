@@ -17,7 +17,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("api/v1/tariffs")
 @RequiredArgsConstructor
-public class TariffsController {
+public class  TariffsController {
     private final TariffService tariffService;
 
     @GetMapping({"", "/"})

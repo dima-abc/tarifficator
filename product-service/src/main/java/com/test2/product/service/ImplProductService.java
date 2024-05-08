@@ -33,8 +33,8 @@ public class ImplProductService implements ProductService {
         Tariff tariff = tariffService.getTariffById(newProduct.getTariffId())
                 .orElseThrow(() -> new NoSuchElementException("product_service.tariff.errors.not.found"));
         product.setTariff(tariff);
-        this.productRepository.save(product);
-        ProductDTO productDTO = this.productMapper.mapToProductDTO(product);
+        Product createProduct = this.productRepository.save(product);
+        ProductDTO productDTO = this.productMapper.mapToProductDTO(createProduct);
         this.kafkaSendService.sendMessage(TOPIC_PRODUCT, productDTO.getId(), productDTO);
         return productDTO;
     }

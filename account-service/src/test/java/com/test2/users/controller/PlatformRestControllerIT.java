@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Locale;
 
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.jwt;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -27,7 +28,8 @@ public class PlatformRestControllerIT {
     @Test
     @Sql("/sql/platform_insert.sql")
     void findPlatformThenReturnPlatform() throws Exception {
-        var requestBuilder = MockMvcRequestBuilders.get("/api/v1/platforms/101");
+        var requestBuilder = MockMvcRequestBuilders.get("/api/v1/platforms/101")
+                .with(jwt().jwt(builder -> builder.claim("scope", "account_service")));
         this.mockMvc.perform(requestBuilder)
                 .andDo(print())
                 .andExpectAll(
@@ -45,7 +47,8 @@ public class PlatformRestControllerIT {
 
     @Test
     void findPlatformDoesNotExistReturnsNotFound() throws Exception {
-        var requestBuilder = MockMvcRequestBuilders.get("/api/v1/platforms/201");
+        var requestBuilder = MockMvcRequestBuilders.get("/api/v1/platforms/201")
+                .with(jwt().jwt(builder -> builder.claim("scope", "account_service")));
         this.mockMvc.perform(requestBuilder)
                 .andDo(print())
                 .andExpectAll(
@@ -57,6 +60,7 @@ public class PlatformRestControllerIT {
     @Sql("/sql/platform_insert.sql")
     void updatePlatformRequestIsValidReturnsNoContent() throws Exception {
         var requestBuilder = MockMvcRequestBuilders.put("/api/v1/platforms/101")
+                .with(jwt().jwt(builder -> builder.claim("scope", "account_service")))
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("""
                         {
@@ -74,6 +78,7 @@ public class PlatformRestControllerIT {
     @Sql("/sql/platform_insert.sql")
     void updatePlatformRequestIsInvalidReturnsBadRequest() throws Exception {
         var requestBuilder = MockMvcRequestBuilders.put("/api/v1/platforms/101")
+                .with(jwt().jwt(builder -> builder.claim("scope", "account_service")))
                 .locale(Locale.forLanguageTag("ru"))
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("""
@@ -91,6 +96,7 @@ public class PlatformRestControllerIT {
     @Test
     void updatePlatformDoesNotExistReturnsNotFound() throws Exception {
         var requestBuilder = MockMvcRequestBuilders.put("/api/v1/platforms/101")
+                .with(jwt().jwt(builder -> builder.claim("scope", "account_service")))
                 .locale(Locale.forLanguageTag("ru"))
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("""
@@ -108,7 +114,8 @@ public class PlatformRestControllerIT {
     @Test
     @Sql("/sql/platform_insert.sql")
     void deletePlatformExistsReturnsNoContent() throws Exception {
-        var requestBuilder = MockMvcRequestBuilders.delete("/api/v1/platforms/101");
+        var requestBuilder = MockMvcRequestBuilders.delete("/api/v1/platforms/101")
+                .with(jwt().jwt(builder -> builder.claim("scope", "account_service")));
         this.mockMvc.perform(requestBuilder)
                 .andDo(print())
                 .andExpectAll(
@@ -118,7 +125,8 @@ public class PlatformRestControllerIT {
 
     @Test
     void deletePlatformDoesNotExist_ReturnsNotFound() throws Exception {
-        var requestBuilder = MockMvcRequestBuilders.delete("/api/v1/platforms/101");
+        var requestBuilder = MockMvcRequestBuilders.delete("/api/v1/platforms/101")
+                .with(jwt().jwt(builder -> builder.claim("scope", "account_service")));
         this.mockMvc.perform(requestBuilder)
                 .andDo(print())
                 .andExpectAll(

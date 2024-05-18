@@ -18,8 +18,9 @@ public class ProductController {
 
     @PostMapping({"", "/"})
     public Mono<ResponseEntity<ProductDTO>> createProduct(@Valid @RequestBody NewProduct newProduct,
-                                                          UriComponentsBuilder uriBuilder) {
-        return this.productService.createProduct(newProduct)
+                                                          UriComponentsBuilder uriBuilder,
+                                                          @RequestHeader("Authorization") String accessToken) {
+        return this.productService.createProduct(newProduct, accessToken)
                 .map(productDTO -> ResponseEntity
                         .created(uriBuilder.replacePath("/api/v1/client/products/{id}")
                                 .build(productDTO.id()))
@@ -27,8 +28,9 @@ public class ProductController {
     }
 
     @DeleteMapping("{productId}")
-    public Mono<ResponseEntity<Void>> deleteProduct(@PathVariable("productId") String productId) {
-        return this.productService.deleteProduct(productId)
+    public Mono<ResponseEntity<Void>> deleteProduct(@PathVariable("productId") String productId,
+                                                    @RequestHeader("Authorization") String accessToken) {
+        return this.productService.deleteProduct(productId, accessToken)
                 .then(Mono.just(ResponseEntity.noContent().build()));
     }
 }

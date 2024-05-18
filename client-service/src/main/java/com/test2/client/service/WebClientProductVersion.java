@@ -15,27 +15,29 @@ public class WebClientProductVersion implements ProductVersionClientService {
     private final WebClient webClient;
 
     @Override
-    public Mono<ProductDTO> findActualProductVersion(String id) {
+    public Mono<ProductDTO> findActualProductVersion(String id, String token) {
         return this.webClient
                 .get()
                 .uri(BASE_URL_PRODUCT_ACTUAL, id)
+                .header("Authorization", token)
                 .retrieve()
                 .bodyToMono(ProductDTO.class);
     }
 
     @Override
-    public Flux<ProductDTO> findPreviousProductVersion(String id) {
+    public Flux<ProductDTO> findPreviousProductVersion(String id, String token) {
         return this.webClient
                 .mutate()
                 .build()
                 .get()
                 .uri(BASE_URL_PRODUCT_PREVIOUS, id)
+                .header("Authorization", token)
                 .retrieve()
                 .bodyToFlux(ProductDTO.class);
     }
 
     @Override
-    public Flux<ProductDTO> findPeriodProductVersion(String id, String startPeriod, String endPeriod) {
+    public Flux<ProductDTO> findPeriodProductVersion(String id, String startPeriod, String endPeriod, String token) {
         return this.webClient
                 .mutate()
                 .build()
@@ -44,15 +46,17 @@ public class WebClientProductVersion implements ProductVersionClientService {
                         .queryParam("start-period", startPeriod)
                         .queryParam("end-period", endPeriod)
                         .build(id))
+                .header("Authorization", token)
                 .retrieve()
                 .bodyToFlux(ProductDTO.class);
     }
 
     @Override
-    public Mono<ProductDTO> revertVersionProduct(String id) {
+    public Mono<ProductDTO> revertVersionProduct(String id, String token) {
         return this.webClient
                 .post()
                 .uri(BASE_URL_PRODUCT_REVERT, id)
+                .header("Authorization", token)
                 .retrieve()
                 .bodyToMono(ProductDTO.class);
     }

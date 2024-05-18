@@ -23,8 +23,9 @@ public class AccountController {
     @PostMapping()
     public Mono<ResponseEntity<?>> createAccount(@RequestHeader(WebClientAccount.HEADER_ACCOUNT) String headerValue,
                                                  @Valid @RequestBody NewAccount newAccount,
-                                                 UriComponentsBuilder uriBuilder) {
-        return accountService.createAccount(headerValue, newAccount)
+                                                 UriComponentsBuilder uriBuilder,
+                                                 @RequestHeader("Authorization") String accessToken) {
+        return accountService.createAccount(headerValue, newAccount, accessToken)
                 .map(account -> ResponseEntity
                         .created(uriBuilder.replacePath("/api/v1/client/accounts/{id}")
                                 .build(account.id().toString()))
@@ -32,12 +33,13 @@ public class AccountController {
     }
 
     @GetMapping("/{id}")
-    public Mono<Account> getAccount(@PathVariable("id") String id) {
-        return accountService.findAccount(id);
+    public Mono<Account> getAccount(@PathVariable("id") String id, @RequestHeader("Authorization") String accessToken) {
+        return accountService.findAccount(id, accessToken);
     }
 
     @GetMapping()
-    public Flux<Account> getAllAccounts(@RequestParam(required = false) Map<String, String> accountParams) {
-        return accountService.findAllAccounts(accountParams);
+    public Flux<Account> getAllAccounts(@RequestParam(required = false) Map<String, String> accountParams,
+                                        @RequestHeader("Authorization") String accessToken) {
+        return accountService.findAllAccounts(accountParams, accessToken);
     }
 }

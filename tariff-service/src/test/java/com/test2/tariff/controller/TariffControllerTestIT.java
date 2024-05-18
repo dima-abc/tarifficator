@@ -8,11 +8,13 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Locale;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.jwt;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -29,6 +31,7 @@ public class TariffControllerTestIT {
     @Autowired
     MockMvc mockMvc;
 
+
     @Test
     void dependencyNotNull() {
         assertNotNull(this.mockMvc);
@@ -37,7 +40,9 @@ public class TariffControllerTestIT {
     @Test
     @Sql("/sql/tariff_product_insert.sql")
     void findTariff_TariffExists_ReturnTariff() throws Exception {
-        this.mockMvc.perform(get(TARIFF_URI, TARIFF1))
+        var requestBuilder = MockMvcRequestBuilders.get(TARIFF_URI, TARIFF1)
+                .with(jwt().jwt(builder -> builder.claim("scope", "tariff_service")));
+        this.mockMvc.perform(requestBuilder)
                 .andDo(print())
                 .andExpectAll(
                         status().isOk(),
@@ -57,7 +62,8 @@ public class TariffControllerTestIT {
 
     @Test
     void findTariff_TariffNotExists_ReturnNotFound() throws Exception {
-        this.mockMvc.perform(get(TARIFF_URI, TARIFF1))
+        this.mockMvc.perform(get(TARIFF_URI, TARIFF1)
+                        .with(jwt().jwt(builder -> builder.claim("scope", "tariff_service"))))
                 .andDo(print())
                 .andExpect(status().isNotFound());
     }
@@ -66,6 +72,7 @@ public class TariffControllerTestIT {
     @Sql("/sql/tariff_product_insert.sql")
     void updateTariff_RequestIsValid_ReturnNoContent() throws Exception {
         this.mockMvc.perform(patch(TARIFF_URI, TARIFF2)
+                        .with(jwt().jwt(builder -> builder.claim("scope", "tariff_service")))
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("""
                                 {
@@ -80,6 +87,7 @@ public class TariffControllerTestIT {
     @Sql("/sql/tariff_product_insert.sql")
     void updateTariff_RequestIsInvalid_ReturnBadRequest() throws Exception {
         MockHttpServletRequestBuilder patch = patch(TARIFF_URI, TARIFF1)
+                .with(jwt().jwt(builder -> builder.claim("scope", "tariff_service")))
                 .locale(Locale.of("ru"))
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("""
@@ -101,6 +109,7 @@ public class TariffControllerTestIT {
     @Test
     void updateTariff_TariffDoesNotExist_ReturnsNotFound() throws Exception {
         MockHttpServletRequestBuilder patch = patch(TARIFF_URI, TARIFF2)
+                .with(jwt().jwt(builder -> builder.claim("scope", "tariff_service")))
                 .locale(Locale.of("ru"))
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("""
@@ -118,15 +127,25 @@ public class TariffControllerTestIT {
     @Test
     @Sql("/sql/tariff_product_insert.sql")
     void deleteTariff_TariffExists_ReturnNoContent() throws Exception {
-        this.mockMvc.perform(delete(TARIFF_URI, TARIFF1))
+        this.mockMvc.perform(delete(TARIFF_URI, TARIFF1)
+                        .with(jwt().jwt(builder -> builder.claim("scope", "tariff_service"))))
                 .andDo(print())
                 .andExpectAll(status().isNoContent());
     }
 
     @Test
     void deleteTariff_TariffDoesNotExist_ReturnNotFound() throws Exception {
-        this.mockMvc.perform(delete(TARIFF_URI, TARIFF2))
+        this.mockMvc.perform(delete(TARIFF_URI, TARIFF2)
+                        .with(jwt().jwt(builder -> builder.claim("scope", "tariff_service"))))
                 .andDo(print())
                 .andExpectAll(status().isNotFound());
+    }
+
+    @Test
+    void deleteTariff_UsersIsNotAuthorized_ReturnForbidden() throws Exception {
+        this.mockMvc.perform(delete(TARIFF_URI, TARIFF2)
+                        .with(jwt()))
+                .andDo(print())
+                .andExpectAll(status().isForbidden());
     }
 }

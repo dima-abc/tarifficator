@@ -17,6 +17,7 @@ import java.util.Locale;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.jwt;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -59,7 +60,8 @@ public class ProductControllerTestIT {
     @Test
     @Sql("/sql/product_tariff_insert.sql")
     void findProduct_ProductExists_ReturnProduct() throws Exception {
-        this.mockMvc.perform(get(PRODUCT_URI, productDTO1.getId()))
+        this.mockMvc.perform(get(PRODUCT_URI, productDTO1.getId())
+                        .with(jwt().jwt(builder -> builder.claim("scope", "product_service"))))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -82,7 +84,8 @@ public class ProductControllerTestIT {
 
     @Test
     void findProduct_ProductNotExists_ReturnNotFound() throws Exception {
-        this.mockMvc.perform(get(PRODUCT_URI, UUID.randomUUID()))
+        this.mockMvc.perform(get(PRODUCT_URI, UUID.randomUUID())
+                        .with(jwt().jwt(builder -> builder.claim("scope", "product_service"))))
                 .andDo(print())
                 .andExpect(status().isNotFound());
     }
@@ -91,6 +94,7 @@ public class ProductControllerTestIT {
     @Sql("/sql/product_tariff_insert.sql")
     void updateProduct_RequestIsValid_ReturnNoContent() throws Exception {
         this.mockMvc.perform(patch(PRODUCT_URI, productDTO2.getId())
+                        .with(jwt().jwt(builder -> builder.claim("scope", "product_service")))
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("""
                                 {
@@ -106,6 +110,7 @@ public class ProductControllerTestIT {
     @Sql("/sql/product_tariff_insert.sql")
     void updateProduct_RequestIsInvalid_ReturnBadRequest() throws Exception {
         this.mockMvc.perform(patch(PRODUCT_URI, productDTO2.getId())
+                        .with(jwt().jwt(builder -> builder.claim("scope", "product_service")))
                         .locale(Locale.of("ru"))
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("""
@@ -127,6 +132,7 @@ public class ProductControllerTestIT {
     @Test
     void updateProduct_ProductDoesNotExist_ReturnNotFound() throws Exception {
         MockHttpServletRequestBuilder patch = MockMvcRequestBuilders.patch(PRODUCT_URI, productDTO3.getId())
+                .with(jwt().jwt(builder -> builder.claim("scope", "product_service")))
                 .locale(Locale.of("ru"))
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("""
@@ -143,15 +149,25 @@ public class ProductControllerTestIT {
     @Test
     @Sql("/sql/product_tariff_insert.sql")
     void deleteProduct_ProductExists_ReturnNoContent() throws Exception {
-        this.mockMvc.perform(delete(PRODUCT_URI, productDTO2.getId()))
+        this.mockMvc.perform(delete(PRODUCT_URI, productDTO2.getId())
+                        .with(jwt().jwt(builder -> builder.claim("scope", "product_service"))))
                 .andDo(print())
                 .andExpect(status().isNoContent());
     }
 
     @Test
     void deleteProduct_ProductDoesNotExist_ReturnNotFound() throws Exception {
-        this.mockMvc.perform(delete(PRODUCT_URI, UUID.randomUUID()))
+        this.mockMvc.perform(delete(PRODUCT_URI, UUID.randomUUID())
+                        .with(jwt().jwt(builder -> builder.claim("scope", "product_service"))))
                 .andDo(print())
                 .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void deleteProduct_UserIsNotAuthorized_ReturnsForbidden() throws Exception {
+        this.mockMvc.perform(delete(PRODUCT_URI, UUID.randomUUID())
+                        .with(jwt()))
+                .andDo(print())
+                .andExpect(status().isForbidden());
     }
 }

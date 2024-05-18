@@ -5,7 +5,7 @@ import com.test2.client.payload.product.ProductDTO;
 import reactor.core.publisher.Mono;
 
 public interface ProductClientService {
-    Mono<ProductDTO> createProduct(NewProduct newProduct);
+    Mono<ProductDTO> createProduct(NewProduct newProduct, String token);
 
-    Mono<Void> deleteProduct(String productId);
+    Mono<Void> deleteProduct(String productId, String token);
 }

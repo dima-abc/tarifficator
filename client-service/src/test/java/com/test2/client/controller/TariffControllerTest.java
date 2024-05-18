@@ -53,14 +53,14 @@ class TariffControllerTest {
                 25.0D);
         UriComponentsBuilder uriComponentsBuilder = UriComponentsBuilder.fromUriString("http://localhost");
         doReturn(Mono.just(tariffDTO)).when(this.tariffClientService)
-                .createTariff(newTariff);
-        StepVerifier.create(this.tariffController.createTariff(newTariff, uriComponentsBuilder))
+                .createTariff(newTariff, "token");
+        StepVerifier.create(this.tariffController.createTariff(newTariff, uriComponentsBuilder, "token"))
                 .expectNext(ResponseEntity
                         .created(URI.create("http://localhost/api/v1/client/tariff/" + uuid))
                         .body(tariffDTO))
                 .verifyComplete();
         verify(this.tariffClientService)
-                .createTariff(newTariff);
+                .createTariff(newTariff, "token");
         verifyNoMoreInteractions(this.tariffClientService);
 
     }
@@ -75,23 +75,22 @@ class TariffControllerTest {
                 "Description tariff",
                 25.0D);
         doReturn(Mono.empty()).when(this.tariffClientService)
-                .updateTariff(uuid.toString(), updateTariff);
-        StepVerifier.create(this.tariffController.updateTariff(uuid.toString(), updateTariff))
+                .updateTariff(uuid.toString(), updateTariff, "token");
+        StepVerifier.create(this.tariffController.updateTariff(uuid.toString(), updateTariff, "token"))
                 .expectNext(ResponseEntity.noContent().build())
                 .verifyComplete();
-        verify(this.tariffClientService).updateTariff(uuid.toString(), updateTariff);
+        verify(this.tariffClientService).updateTariff(uuid.toString(), updateTariff, "token");
         verifyNoMoreInteractions(this.tariffClientService);
     }
 
     @Test
     void deleteTariff_return_noContent() {
         UUID uuid = UUID.randomUUID();
-        doReturn(Mono.empty()).when(this.tariffClientService).deleteTariff(uuid.toString());
-        StepVerifier.create(this.tariffController.deleteTariff(uuid.toString()))
+        doReturn(Mono.empty()).when(this.tariffClientService).deleteTariff(uuid.toString(), "token");
+        StepVerifier.create(this.tariffController.deleteTariff(uuid.toString(), "token"))
                 .expectNext(ResponseEntity.noContent().build())
                 .verifyComplete();
-        verify(this.tariffClientService).deleteTariff(uuid.toString());
+        verify(this.tariffClientService).deleteTariff(uuid.toString(), "token");
         verifyNoMoreInteractions(this.tariffClientService);
-
     }
 }

@@ -13,10 +13,10 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.Locale;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.jwt;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -47,9 +47,8 @@ public class TariffsControllerTestIT {
     @Test
     @Sql("/sql/tariff_product_insert.sql")
     void findAllTariff_ReturnsAllTariffs() throws Exception {
-        List<TariffDTO> tariffs = List.of(tariffDTO1, tariffDTO2);
-        String string = tariffs.toString();
-        this.mockMvc.perform(get(TARIFFS_URI))
+        this.mockMvc.perform(get(TARIFFS_URI)
+                .with(jwt().jwt(builder -> builder.claim("scope", "tariff_service"))))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -64,7 +63,8 @@ public class TariffsControllerTestIT {
 
     @Test
     void findAllTariffs_ReturnsEmpty() throws Exception {
-        this.mockMvc.perform(get(TARIFFS_URI))
+        this.mockMvc.perform(get(TARIFFS_URI)
+                .with(jwt().jwt(builder -> builder.claim("scope", "tariff_service"))))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -76,6 +76,7 @@ public class TariffsControllerTestIT {
     @Test
     void createTariff_RequestIsValid_ReturnsNewTariff() throws Exception {
         var requestBuild = MockMvcRequestBuilders.post(TARIFFS_URI)
+                .with(jwt().jwt(builder -> builder.claim("scope", "tariff_service")))
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("""
                         {"name":"New tariff", "startDate":"2024-02-20", "endDate":"2026-04-08",
@@ -99,6 +100,7 @@ public class TariffsControllerTestIT {
     @Test
     void createTariff_RequestIsInvalid_ReturnsProblemDetail() throws Exception {
         var requestBuild = MockMvcRequestBuilders.post(TARIFFS_URI)
+                .with(jwt().jwt(builder -> builder.claim("scope", "tariff_service")))
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("""
                         {"startDate":"2024-02-20", "endDate":"2026-04-08",

@@ -13,20 +13,22 @@ public class WebClientProduct implements ProductClientService {
     private final WebClient webClient;
 
     @Override
-    public Mono<ProductDTO> createProduct(NewProduct newProduct) {
+    public Mono<ProductDTO> createProduct(NewProduct newProduct,String token) {
         return this.webClient
                 .post()
                 .uri(BASE_URL_PRODUCT)
+                .header("Authorization", token)
                 .bodyValue(newProduct)
                 .retrieve()
                 .bodyToMono(ProductDTO.class);
     }
 
     @Override
-    public Mono<Void> deleteProduct(String productId) {
+    public Mono<Void> deleteProduct(String productId, String token) {
         return this.webClient
                 .delete()
                 .uri(BASE_URL_PRODUCT_ID, productId)
+                .header("Authorization", token)
                 .retrieve()
                 .toBodilessEntity()
                 .then();

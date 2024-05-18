@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Locale;
 
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.jwt;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -27,6 +28,7 @@ public class PlatformsRestControllerIT {
     @Sql("/sql/platform_insert.sql")
     void findPlatformReturnsPlatformList() throws Exception {
         var requestBuilder = MockMvcRequestBuilders.get("/api/v1/platforms")
+                .with(jwt().jwt(builder -> builder.claim("scope", "account_service")))
                 .param("p-name", "email1");
         this.mockMvc.perform(requestBuilder)
                 .andDo(print())
@@ -47,6 +49,7 @@ public class PlatformsRestControllerIT {
     @Test
     void createPlatformRequestIsValidReturnsNewPlatform() throws Exception {
         var requestBuilder = MockMvcRequestBuilders.post("/api/v1/platforms")
+                .with(jwt().jwt(builder -> builder.claim("scope", "account_service")))
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("""
                         {
@@ -68,6 +71,7 @@ public class PlatformsRestControllerIT {
     @Test
     void createPlatformRequestIsInvalidReturnsProblemDetail() throws Exception {
         var requestBuilder = MockMvcRequestBuilders.post("/api/v1/platforms")
+                .with(jwt().jwt(builder -> builder.claim("scope", "account_service")))
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("""
                         {"platformName": "  "}

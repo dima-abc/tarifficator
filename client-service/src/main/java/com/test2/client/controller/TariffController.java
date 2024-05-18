@@ -25,8 +25,9 @@ public class TariffController {
      */
     @PostMapping()
     public Mono<ResponseEntity<?>> createTariff(@Valid @RequestBody NewTariff newTariff,
-                                                UriComponentsBuilder uriBuilder) {
-        return tariffService.createTariff(newTariff)
+                                                UriComponentsBuilder uriBuilder,
+                                                @RequestHeader("Authorization") String accessToken) {
+        return tariffService.createTariff(newTariff, accessToken)
                 .map(tariffDTO -> ResponseEntity
                         .created(uriBuilder.replacePath("/api/v1/client/tariff/{id}")
                                 .build(tariffDTO.id()))
@@ -35,14 +36,16 @@ public class TariffController {
 
     @PatchMapping("/{tariffId}")
     public Mono<ResponseEntity<?>> updateTariff(@PathVariable("tariffId") String tariffId,
-                                                @Valid @RequestBody UpdateTariff updateTariff) {
-        return this.tariffService.updateTariff(tariffId, updateTariff)
+                                                @Valid @RequestBody UpdateTariff updateTariff,
+                                                @RequestHeader("Authorization") String accessToken) {
+        return this.tariffService.updateTariff(tariffId, updateTariff, accessToken)
                 .then(Mono.just(ResponseEntity.noContent().build()));
     }
 
     @DeleteMapping("/{tariffId}")
-    public Mono<ResponseEntity<Void>> deleteTariff(@PathVariable("tariffId") String tariffId) {
-        return this.tariffService.deleteTariff(tariffId)
+    public Mono<ResponseEntity<Void>> deleteTariff(@PathVariable("tariffId") String tariffId,
+                                                   @RequestHeader("Authorization") String accessToken) {
+        return this.tariffService.deleteTariff(tariffId, accessToken)
                 .then(Mono.just(ResponseEntity.noContent().build()));
     }
 }

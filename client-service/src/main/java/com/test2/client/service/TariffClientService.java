@@ -6,9 +6,9 @@ import com.test2.client.payload.tariff.UpdateTariff;
 import reactor.core.publisher.Mono;
 
 public interface TariffClientService {
-    Mono<TariffDTO> createTariff(NewTariff newTariff);
+    Mono<TariffDTO> createTariff(NewTariff newTariff, String token);
 
-    Mono<Void> updateTariff(String tariffId, UpdateTariff updateTariff);
+    Mono<Void> updateTariff(String tariffId, UpdateTariff updateTariff, String token);
 
-    Mono<Void> deleteTariff(String tariffId);
+    Mono<Void> deleteTariff(String tariffId, String token);
 }

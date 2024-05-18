@@ -14,30 +14,33 @@ public class ProductVersionController {
     private final ProductVersionClientService productVersionService;
 
     @GetMapping("/actual")
-    public Mono<ProductDTO> findActualProductVersion(@PathVariable("uuid") String uuid) {
+    public Mono<ProductDTO> findActualProductVersion(@PathVariable("uuid") String uuid,
+                                                     @RequestHeader("Authorization") String accessToken) {
         return this.productVersionService
-                .findActualProductVersion(uuid);
+                .findActualProductVersion(uuid, accessToken);
     }
 
     @GetMapping("/previous")
-    public Flux<ProductDTO> findPreviousProductVersion(@PathVariable("uuid") String uuid) {
+    public Flux<ProductDTO> findPreviousProductVersion(@PathVariable("uuid") String uuid,
+                                                       @RequestHeader("Authorization") String accessToken) {
         return this.productVersionService
-                .findPreviousProductVersion(uuid);
+                .findPreviousProductVersion(uuid, accessToken);
     }
 
     @GetMapping("/period")
     public Flux<ProductDTO> findPeriodProductVersion(@PathVariable("uuid") String uuid,
                                                      @RequestParam("start-period") String startPeriod,
-                                                     @RequestParam("end-period") String endPeriod) {
+                                                     @RequestParam("end-period") String endPeriod,
+                                                     @RequestHeader("Authorization") String accessToken) {
         return this.productVersionService
-                .findPeriodProductVersion(uuid, startPeriod, endPeriod);
+                .findPeriodProductVersion(uuid, startPeriod, endPeriod, accessToken);
     }
 
     @PostMapping("/revert")
-    public Mono<ProductDTO> revertVersionProduct(@PathVariable("uuid") String uuid) {
+    public Mono<ProductDTO> revertVersionProduct(@PathVariable("uuid") String uuid,
+                                                 @RequestHeader("Authorization") String accessToken) {
         return this.productVersionService
-                .revertVersionProduct(uuid);
+                .revertVersionProduct(uuid, accessToken);
     }
-
 }
 

@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
 
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.jwt;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -34,6 +35,7 @@ public class AccountsRestControllerTestIT {
     @Sql("/sql/accounts_insert.sql")
     void findAccountByAccountParamReturnIterableAccount() throws Exception {
         var requestBuilder = MockMvcRequestBuilders.get("/api/v1/accounts")
+                .with(jwt().jwt(builder -> builder.claim("scope", "account_service")))
                 .param("lastName", "Петров")
                 .param("firstName", "Карп");
         this.mockMvc.perform(requestBuilder)
@@ -56,6 +58,7 @@ public class AccountsRestControllerTestIT {
     @Sql("/sql/accounts_insert.sql")
     void findAccountByAccountParamReturnIterableAccountEmpty() throws Exception {
         var requestBuilder = MockMvcRequestBuilders.get("/api/v1/accounts")
+                .with(jwt().jwt(builder -> builder.claim("scope", "account_service")))
                 .param("lastName", "XXX")
                 .param("firstName", "XXX");
         this.mockMvc.perform(requestBuilder)
@@ -69,7 +72,8 @@ public class AccountsRestControllerTestIT {
 
     @Test
     void findAccountByAccountParamReturnBadRequest() throws Exception {
-        var requestBuilder = MockMvcRequestBuilders.get("/api/v1/accounts");
+        var requestBuilder = MockMvcRequestBuilders.get("/api/v1/accounts")
+                .with(jwt().jwt(builder -> builder.claim("scope", "account_service")));
         this.mockMvc.perform(requestBuilder)
                 .andDo(print())
                 .andExpect(status().is4xxClientError());
@@ -80,6 +84,7 @@ public class AccountsRestControllerTestIT {
         String headerName = "x-Source";
         UUID uuid = UUID.randomUUID();
         var requestBuilder = MockMvcRequestBuilders.post("/api/v1/accounts")
+                .with(jwt().jwt(builder -> builder.claim("scope", "account_service")))
                 .header(headerName, "mail")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("""
@@ -103,6 +108,7 @@ public class AccountsRestControllerTestIT {
     void createAccountRequestValidReturnBadRequest() throws Exception {
         String headerName = "x-Source";
         var requestBuilder = MockMvcRequestBuilders.post("/api/v1/accounts")
+                .with(jwt().jwt(builder -> builder.claim("scope", "account_service")))
                 .header(headerName, "mail")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("""

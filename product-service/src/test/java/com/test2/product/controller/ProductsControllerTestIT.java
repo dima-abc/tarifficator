@@ -18,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Locale;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.jwt;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -58,7 +59,8 @@ class ProductsControllerTestIT {
 
     @Test
     void findAllProducts_returns_Empty() throws Exception {
-        this.mockMvc.perform(get(PROUCT_URI))
+        this.mockMvc.perform(get(PROUCT_URI)
+                .with(jwt().jwt(builder -> builder.claim("scope", "product_service"))))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -70,7 +72,8 @@ class ProductsControllerTestIT {
     @Test
     @Sql("/sql/product_tariff_insert.sql")
     void findAllProduct_returns_allProducts() throws Exception {
-        this.mockMvc.perform(get(PROUCT_URI))
+        this.mockMvc.perform(get(PROUCT_URI)
+                .with(jwt().jwt(builder -> builder.claim("scope", "product_service"))))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -119,6 +122,7 @@ class ProductsControllerTestIT {
     @Sql("/sql/product_tariff_insert.sql")
     void createProduct_RequestIsValid_ReturnsNewProduct() throws Exception {
         MockHttpServletRequestBuilder patch = MockMvcRequestBuilders.post(PROUCT_URI)
+                .with(jwt().jwt(builder -> builder.claim("scope", "product_service")))
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("""
                         {
@@ -156,6 +160,7 @@ class ProductsControllerTestIT {
     @Sql("/sql/product_tariff_insert.sql")
     void createProduct_RequestIsInvalid_ReturnsProblemDetail() throws Exception {
         MockHttpServletRequestBuilder patch = MockMvcRequestBuilders.post(PROUCT_URI)
+                .with(jwt().jwt(builder -> builder.claim("scope", "product_service")))
                 .locale(Locale.of("ru", "RU"))
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("""

@@ -8,9 +8,9 @@ import reactor.core.publisher.Mono;
 import java.util.Map;
 
 public interface AccountClientService {
-    Mono<Account> createAccount(String headerValue, NewAccount newAccount);
+    Mono<Account> createAccount(String headerValue, NewAccount newAccount, String token);
 
-    Mono<Account> findAccount(String accountId);
+    Mono<Account> findAccount(String accountId, String token);
 
-    Flux<Account> findAllAccounts(Map<String, String> accountParam);
+    Flux<Account> findAllAccounts(Map<String, String> accountParam, String token);
 }

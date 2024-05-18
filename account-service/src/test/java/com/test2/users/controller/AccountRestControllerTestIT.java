@@ -10,6 +10,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.transaction.annotation.Transactional;
 
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.jwt;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -30,7 +31,8 @@ public class AccountRestControllerTestIT {
     @Test
     @Sql("/sql/accounts_insert.sql")
     void findAccountThenReturnAccount() throws Exception {
-        var requestBuilder = MockMvcRequestBuilders.get("/api/v1/accounts/3d491244-4fd6-4368-a97d-d2fb610d8649");
+        var requestBuilder = MockMvcRequestBuilders.get("/api/v1/accounts/3d491244-4fd6-4368-a97d-d2fb610d8649")
+                .with(jwt().jwt(builder -> builder.claim("scope", "account_service")));
         this.mockMvc.perform(requestBuilder)
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -53,7 +55,8 @@ public class AccountRestControllerTestIT {
 
     @Test
     void findAccountThenReturnErrorMessage() throws Exception {
-        var requestBuilder = MockMvcRequestBuilders.get("/api/v1/accounts/3d491244-4fd6-4368-a97d-d2fb610d8649");
+        var requestBuilder = MockMvcRequestBuilders.get("/api/v1/accounts/3d491244-4fd6-4368-a97d-d2fb610d8649")
+                .with(jwt().jwt(builder -> builder.claim("scope", "account_service")));
         this.mockMvc.perform(requestBuilder)
                 .andDo(print())
                 .andExpect(status().is4xxClientError())

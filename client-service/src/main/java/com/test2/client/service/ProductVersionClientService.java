@@ -5,11 +5,11 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 public interface ProductVersionClientService {
-    Mono<ProductDTO> findActualProductVersion(String id);
+    Mono<ProductDTO> findActualProductVersion(String id, String token);
 
-    Flux<ProductDTO> findPreviousProductVersion(String id);
+    Flux<ProductDTO> findPreviousProductVersion(String id, String token);
 
-    Flux<ProductDTO> findPeriodProductVersion(String id, String startPeriod, String endPeriod);
+    Flux<ProductDTO> findPeriodProductVersion(String id, String startPeriod, String endPeriod, String token);
 
-    Mono<ProductDTO> revertVersionProduct(String id);
+    Mono<ProductDTO> revertVersionProduct(String id, String token);
 }
